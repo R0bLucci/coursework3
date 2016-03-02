@@ -1,28 +1,30 @@
 package benjaminrobert;
-import benjaminrobert.model.Defender;
-import benjaminrobert.model.Goalkeeper;
-import benjaminrobert.model.Midfielder;
-import benjaminrobert.model.Player;
 
+import java.awt.EventQueue;
+
+import benjaminrobert.controller.Controller;
+import benjaminrobert.model.Squad;
+import benjaminrobert.view.Fantasy;
 
 public class Main {
 
 	public static void main(String[] args){
 		
-		Defender d = new Defender("Paul");
-		Goalkeeper goalkeeper = new Goalkeeper("Fiil");
-		Midfielder midfielder = new Midfielder("ok");
 		
-		System.out.println(d);
-		System.out.println(goalkeeper);
-		System.out.println(midfielder);
-		
-		if(Player.getImagesName() != null){
-			for(String s : Player.getImagesName()){
-				System.out.println(s);
-			}
-		}
-		
+		EventQueue.invokeLater(new Runnable(){
 
+			@Override
+			public void run() {
+				Fantasy f = new Fantasy();
+				f.setVisible(true);
+				Squad s = new Squad();
+				Controller c = new Controller(s, f);
+			}
+			
+		});
+		
+		
 	}
+		
+		
 }
