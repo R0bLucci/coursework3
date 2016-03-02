@@ -2,7 +2,9 @@ package benjaminrobert.model;
 
 public class Striker extends Player {
 
-	public Striker(String name){
-		super(name);
+	public Striker(){
+		super();
+		name = "Striker";
+		role = name;
 	}
 }

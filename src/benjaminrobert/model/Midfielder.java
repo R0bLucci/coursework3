@@ -2,7 +2,9 @@ package benjaminrobert.model;
 
 public class Midfielder extends Player {
 
-	public Midfielder(String name){
-		super(name);
+	public Midfielder(){
+		super();
+		name = "Midfielder";
+		role = name;
 	}
 }

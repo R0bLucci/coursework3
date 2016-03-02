@@ -8,24 +8,25 @@ public abstract class Player {
 
 	protected String role;
 	protected String name;
+	protected String imagePath;
 	protected int playerID = 0;
 	protected ImageIcon image;
 	
 	private static int ID ;
-	protected static  File file;
+	protected File file;
 	
 	static {
-		file = new File("./src/Minor Piece of Coursework 3 Resources/squad");
 		ID = 0;
 	}
 	
-	public Player(String name){
-		role = null;
-		this.name = name;
+	public Player(){
+		this.name = null;
+		imagePath = null;
 		playerID = ++ID;
+		file = new File("./src/Minor Piece of Coursework 3 Resources/squad");
 	}
 	
-	public static String[] getImagesName(){
+	public String[] getImagesName(){
 		String[] jpgName = file.list();
 		if(file != null && jpgName != null){
 			String ext = ".jpg";
@@ -50,21 +51,23 @@ public abstract class Player {
 		return playerID;
 	}
 	
+	public String getImagePath(){
+		return imagePath;
+	}
+	
+	public void setPath(String imagePath){
+		this.imagePath = imagePath;
+	}
+	
+	public void setName(String playerName){
+		name += " " + playerName;
+	}
+	
 	public String getPlayerRole(){
 		return role;
 	}
 	
 	public String toString(){
-		role = "";
-		if(this instanceof Goalkeeper){
-			role = "Goalkeeper";
-		}else if(this instanceof Defender){
-			role = "Defender";
-		}else if(this instanceof Midfielder){
-			role = "Midfielder";
-		}else if(this instanceof Striker){
-			role = "Striker";
-		}
-		return role + " " + name + " ID: " + playerID;
+		return name + " ID: " + playerID;
 	}
 }
