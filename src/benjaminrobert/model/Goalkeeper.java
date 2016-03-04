@@ -1,18 +1,18 @@
 package benjaminrobert.model;
 
-
 /**
  * @author benjaminrobert
- * Striker extends the Player class. 
+ * Goalkeeper extends the Player class. 
  * Super calls the parent class of player. 
- * Name called Striker.
+ * Name called Goalkeeper.
  * The role is equals to the name.
  */
-public class Striker extends Player {
 
-	public Striker(){
+public class Goalkeeper extends Player {
+
+	public Goalkeeper(){
 		super();
-		name = "Striker";
+		name = "Goalkeeper";
 		role = name;
 	}
 }
