@@ -38,7 +38,11 @@ public class Fantasy extends JFrame implements Observable{
 	List<Observer> observers;
 	
 	
-	
+	/**
+	 * Constructor - for Fantasy
+	 * @author benjaminrobert
+	 * 
+	 */
 	public Fantasy(){
 		// Call super class to set title of the frame
 		super("Fantasy Football");
@@ -86,6 +90,13 @@ public class Fantasy extends JFrame implements Observable{
 		return playerPanel;
 	}
 	
+	/**
+	 * @author benjaminrobert
+	 * Adds the goalkeepers to the goalkeeper panel. 
+	 * @param id This is the first paramter to  addGoalKeeper method
+	 * @param playerName This is the second paramter to  addGoalKeeper method
+	 * @param path This is the third paramter to  addGoalKeeper method
+	 */
 	public void addGoalkeeper(int id, String playerName, String path){
 		goalKeeperPanel.add(playerPlaceholderPanel(id, playerName, path));
 		goalKeeperPanel.repaint();
@@ -93,30 +104,60 @@ public class Fantasy extends JFrame implements Observable{
 	}
 	
 	
+	/**
+	 * @author benjaminrobert
+	 * Adds the defenders to the defenders panel. 
+	 * @param id This is the first paramter to  addDefender method
+	 * @param playerName This is the second paramter to  addDefender method
+	 * @param path This is the third paramter to addDefender method
+	 */
 	public void addDefender(int id, String playerName, String path){
 		defendersPanel.add(playerPlaceholderPanel(id, playerName, path));
 		defendersPanel.repaint();
 		defendersPanel.revalidate();
 	}
 	
+	
+	/**
+	 * @author benjaminrobert
+	 * Adds the Midfielders to the Midfielders panel. 
+	 * @param id This is the first paramter to  addMidfielder method
+	 * @param playerName This is the second paramter to  addMidfielder method
+	 * @param path This is the third paramter to addMidfielder method
+	 */
 	public void addMidfielder(int id, String playerName, String path){
 		midfieldersPanel.add(playerPlaceholderPanel(id, playerName, path));
 		midfieldersPanel.repaint();
 		midfieldersPanel.revalidate();
 	}
 	
+	/**
+	 * @author benjaminrobert
+	 * Adds the Striker to the Strikers panel. 
+	 * @param id This is the first paramter to addStriker method
+	 * @param playerName This is the second paramter to  addStriker method
+	 * @param path This is the third paramter to addStriker method
+	 */
 	public void addStriker(int id, String playerName, String path){
 		strikersPanel.add(playerPlaceholderPanel(id, playerName, path));
 		strikersPanel.repaint();
 		strikersPanel.revalidate();
 	}
 	
+	/**
+	 * @author benjaminrobert
+	 * Adds the BenchPlayer to the BenchPlayers panel. 
+	 * @param id This is the first paramter to addBenchPlayer method
+	 * @param playerName This is the second paramter to addBenchPlayer method
+	 * @param path This is the third paramter to addBenchPlayer method
+	 */
 	public void addBenchPlayer(int id, String playerName, String path){
 		footerBenchPanel.add(playerPlaceholderPanel(id, playerName, path));
 		footerBenchPanel.repaint();
 		footerBenchPanel.revalidate();
 	}
 	
+
 	private void setGoalkeeperPanel(){
 		goalKeeperPanel = new JPanel();
 		goalKeeperPanel.setLayout(new BoxLayout(goalKeeperPanel, BoxLayout.X_AXIS));
@@ -183,6 +224,11 @@ public class Fantasy extends JFrame implements Observable{
 		pack();
 	}
 	
+	/**
+	 * @author benjaminrobert
+	 * Chaelrs the pitch and removes all the players per position. 
+	 * @param none
+	 */
 	public void clearPitch(){
 			
 		goalKeeperPanel.removeAll();
@@ -224,10 +270,22 @@ public class Fantasy extends JFrame implements Observable{
 		return formations;
 	}
 	
+	/**
+	 * @author benjaminrobert
+	 * Gets the formation selected from the combobox. 
+	 * @param none.
+	 * @return the cmbFormations.
+	 */
 	public JComboBox getFormationSelection(){
 		return cmbFormations;
 	}
 
+	/**
+	 * @author benjaminrobert
+	 * Notifys the Observer of changes.. 
+	 * @param button This is the first paramter to notifyObservers method
+	 * @param textField This is the second paramter to notifyObservers method
+	 */
 	public void notifyObservers(JButton button, JTextField textField) {
 		if(observers != null){
 			for(Observer observer: observers){
@@ -236,6 +294,12 @@ public class Fantasy extends JFrame implements Observable{
 		}
 	}
 
+	
+	/**
+	 * @author benjaminrobert
+	 * Adds an Observer. 
+	 * @param observer This is the first paramter to addObserver method
+	 */
 	public void addObserver(Observer observer) {
 		if(observers != null){
 			observers.add(observer);
