@@ -9,24 +9,24 @@ public abstract class Player {
 	protected String role;
 	protected String name;
 	protected String imagePath;
-	protected int playerID = 0;
+	protected int playerID;
 	protected ImageIcon image;
 	
-	private static int ID ;
-	protected File file;
+	private static int ID;
+	protected static File file;
 	
 	static {
 		ID = 0;
+		file = new File("./src/Minor Piece of Coursework 3 Resources/squad");
 	}
 	
 	public Player(){
 		this.name = null;
-		imagePath = null;
+		imagePath = "None";
 		playerID = ++ID;
-		file = new File("./src/Minor Piece of Coursework 3 Resources/squad");
 	}
 	
-	public String[] getImagesName(){
+	public static String[] getImagesName(){
 		String[] jpgName = file.list();
 		if(file != null && jpgName != null){
 			String ext = ".jpg";
@@ -56,11 +56,19 @@ public abstract class Player {
 	}
 	
 	public void setPath(String imagePath){
-		this.imagePath = imagePath;
+		if(!this.imagePath.equals(imagePath)){
+			this.imagePath = imagePath;
+		}
 	}
 	
 	public void setName(String playerName){
-		name += " " + playerName;
+		if(!name.contains(playerName)){
+			name += " " + playerName;
+		}
+	}
+	
+	public void resetName(){
+		name = role;
 	}
 	
 	public String getPlayerRole(){

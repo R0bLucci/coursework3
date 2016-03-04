@@ -29,39 +29,24 @@ public class Squad {
 	
 	
 	public void initSquad(){
-			Goalkeeper gk1 = new Goalkeeper();
-			Goalkeeper gk2 = new Goalkeeper();
-			Defender d1 = new Defender();
-			Defender d2 = new Defender();
-			Defender d3 = new Defender();
-			Defender d4 = new Defender();
-			Defender d5 = new Defender();
-			Midfielder mf1 = new Midfielder();
-			Midfielder mf2 = new Midfielder();
-			Midfielder mf3 = new Midfielder();
-			Midfielder mf4 = new Midfielder();
-			Midfielder mf5 = new Midfielder();
-			Striker s1 = new Striker();
-			Striker s2 = new Striker();
-			Striker s3 = new Striker();
-			addPlayer(gk1);
-			addPlayer(gk2);
-			addPlayer(d1);
-			addPlayer(d2);
-			addPlayer(d3);
-			addPlayer(d4);
-			addPlayer(d5);
-			addPlayer(mf1);
-			addPlayer(mf2);
-			addPlayer(mf3);
-			addPlayer(mf4);
-			addPlayer(mf5);
-			addPlayer(s1);
-			addPlayer(s2);
-			addPlayer(s3);
+		for(int i = 0; i < players.length; i++){
+			if(i < 2){
+				Goalkeeper goalkeeper = new Goalkeeper();
+				addPlayer(goalkeeper);
+			}else if(i < 7){
+				Defender defender = new Defender();
+				addPlayer(defender);
+			}else if(i < 12){
+				Midfielder midfielder = new Midfielder();
+				addPlayer(midfielder);
+			}else{
+				Striker striker = new Striker();
+				addPlayer(striker);
+			}
+		}
 	}
 	
-	public void addPlayer(Player player){
+	private void addPlayer(Player player){
 		if(index < 15){
 			players[index++] = player;
 		}

@@ -20,7 +20,6 @@ public class Main {
 				Squad s = new Squad();
 				Controller c = new Controller(s, f);
 			}
-			
 		});
 		
 		

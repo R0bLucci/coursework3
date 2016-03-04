@@ -11,10 +11,10 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -37,8 +37,6 @@ public class Fantasy extends JFrame implements Observable{
 	JPanel footerBenchPanel; // bench panel 
 	List<Observer> observers;
 	
-	
-	
 	public Fantasy(){
 		// Call super class to set title of the frame
 		super("Fantasy Football");
@@ -57,13 +55,16 @@ public class Fantasy extends JFrame implements Observable{
 		JPanel tmpPlaceHolderPanel = new JPanel(new BorderLayout());
 		tmpPlaceHolderPanel.setBounds(10, 10, 10, 10);
 		
+		JLabel lblImgPlaceholder = new JLabel("+");
+		lblImgPlaceholder.setName(String.valueOf(id));
+		lblImgPlaceholder.setOpaque(true);
+		lblImgPlaceholder.setFont(new Font("Verdana", Font.BOLD, 15));
+		lblImgPlaceholder.setHorizontalAlignment(JLabel.CENTER);
+        lblImgPlaceholder.setOpaque(true);
 		
-		JButton btnImgPlaceholder = new JButton("+");
-		btnImgPlaceholder.setFont(new Font("Verdana", Font.BOLD, 15));
-		
-		btnImgPlaceholder.addMouseListener(null);
 		
 		JTextField txtPlayerRole = new JTextField(playerName, 10);
+		txtPlayerRole.setName(String.valueOf(id));
 		txtPlayerRole.setBounds(10, 10, 10, 10);
 		
 		// Set text area properties
@@ -76,75 +77,68 @@ public class Fantasy extends JFrame implements Observable{
 		playerPanel.setBorder(border);
 		
 		
-		tmpPlaceHolderPanel.add(btnImgPlaceholder, BorderLayout.CENTER);
+		tmpPlaceHolderPanel.add(lblImgPlaceholder, BorderLayout.CENTER);
 		tmpPlaceHolderPanel.add(txtPlayerRole, BorderLayout.SOUTH);		
 		
 		playerPanel.add(tmpPlaceHolderPanel);
 		
-		notifyObservers(btnImgPlaceholder, txtPlayerRole);
 		
+		
+		notifyObservers(lblImgPlaceholder, txtPlayerRole);
+		
+		playerPanel.setOpaque(false);
 		return playerPanel;
 	}
 	
 	public void addGoalkeeper(int id, String playerName, String path){
 		goalKeeperPanel.add(playerPlaceholderPanel(id, playerName, path));
-		goalKeeperPanel.repaint();
-		goalKeeperPanel.revalidate();
 	}
 	
 	
 	public void addDefender(int id, String playerName, String path){
 		defendersPanel.add(playerPlaceholderPanel(id, playerName, path));
-		defendersPanel.repaint();
-		defendersPanel.revalidate();
 	}
 	
 	public void addMidfielder(int id, String playerName, String path){
 		midfieldersPanel.add(playerPlaceholderPanel(id, playerName, path));
-		midfieldersPanel.repaint();
-		midfieldersPanel.revalidate();
 	}
 	
 	public void addStriker(int id, String playerName, String path){
 		strikersPanel.add(playerPlaceholderPanel(id, playerName, path));
-		strikersPanel.repaint();
-		strikersPanel.revalidate();
 	}
 	
 	public void addBenchPlayer(int id, String playerName, String path){
 		footerBenchPanel.add(playerPlaceholderPanel(id, playerName, path));
-		footerBenchPanel.repaint();
-		footerBenchPanel.revalidate();
 	}
 	
 	private void setGoalkeeperPanel(){
 		goalKeeperPanel = new JPanel();
 		goalKeeperPanel.setLayout(new BoxLayout(goalKeeperPanel, BoxLayout.X_AXIS));
-		//goalKeeperPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
+		goalKeeperPanel.setBackground(new Color(34,139,34));
 	}
 	
 	private void setDefendersPanel(){
 		defendersPanel = new JPanel();
 		defendersPanel.setLayout(new BoxLayout(defendersPanel, BoxLayout.X_AXIS));
-		//defendersPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+		defendersPanel.setBackground(new Color(50,205,50));
 	}
 	
 	private void setMidfieldersPanel(){
 		midfieldersPanel = new JPanel();
 		midfieldersPanel.setLayout(new BoxLayout(midfieldersPanel, BoxLayout.X_AXIS));
-		//midfieldersPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN, 5));
+		midfieldersPanel.setBackground(new Color(34,139,34));
 	}
 	
 	private void setStrikersPanel(){
 		strikersPanel = new JPanel();
 		strikersPanel.setLayout(new BoxLayout(strikersPanel, BoxLayout.X_AXIS));
-		//strikersPanel.setBorder(BorderFactory.createLineBorder(Color.CYAN, 5));
+		strikersPanel.setBackground(new Color(50,205,50));
 	}
 	
 	private void setBenchPanel(){
 		footerBenchPanel = new JPanel();
 		footerBenchPanel.setLayout(new BoxLayout(footerBenchPanel, BoxLayout.X_AXIS));
-		//footerBenchPanel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
+		footerBenchPanel.setBackground(new Color(190,190,190));
 	}
 	
 	private void init(){
@@ -212,8 +206,6 @@ public class Fantasy extends JFrame implements Observable{
 		Border padding = BorderFactory.createEmptyBorder(20, 20, 20, 20);
 		formationSelectionPanel.setBorder(padding);
 		
-		cmbFormations.addActionListener(null);
-		
 		formationSelectionPanel.add(cmbFormations);
 		mainPanel.add(formationSelectionPanel, BorderLayout.NORTH);
 		
@@ -224,14 +216,14 @@ public class Fantasy extends JFrame implements Observable{
 		return formations;
 	}
 	
-	public JComboBox getFormationSelection(){
+	public JComboBox<String> getFormationSelection(){
 		return cmbFormations;
 	}
 
-	public void notifyObservers(JButton button, JTextField textField) {
+	public void notifyObservers(JComponent component, JTextField textField) {
 		if(observers != null){
 			for(Observer observer: observers){
-				observer.update(this, button, textField);
+				observer.update(this, component, textField);
 			}
 		}
 	}
