@@ -23,6 +23,13 @@ public class Controller implements Observer {
 	private Fantasy fantasy;
 	private ActionsListener actionsListener;
 	
+	/**
+	 * Constructor
+	 * @author benjaminrobert
+	 * @param squad the first paramter to Controller method.
+	 * @param fantasy the Second paramter to Controller method.
+	 * 
+	 */
 	public Controller(Squad squad, Fantasy fantasy){
 		this.squad = squad;
 		this.fantasy = fantasy;
