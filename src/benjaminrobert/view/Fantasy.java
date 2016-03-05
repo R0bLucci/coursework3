@@ -41,10 +41,15 @@ public class Fantasy extends JFrame implements Observable{
 	public Fantasy(){
 		// Call super class to set title of the frame
 		super("Fantasy Football");
-		
 		// Initialize the components 
 		init();
 	}
+	
+	public void initObserver(Observer observer){
+		addObserver(observer);
+		notifyObservers(cmbFormations, null);
+	}
+	
 	
 	// Create temporary place holder for player panel
 	private JPanel playerPlaceholderPanel(int id, String playerName, String path){
@@ -87,7 +92,7 @@ public class Fantasy extends JFrame implements Observable{
 		
 		playerPanel.add(tmpPlaceHolderPanel);
 		
-		
+		playerPanel.setName(String.valueOf(id));
 		
 		notifyObservers(lblImgPlaceholder, txtPlayerRole);
 		
@@ -175,6 +180,7 @@ public class Fantasy extends JFrame implements Observable{
 		mainPanel.add(footerBenchPanel, BorderLayout.SOUTH);
 		
 		
+		
 		add(mainPanel);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -192,11 +198,10 @@ public class Fantasy extends JFrame implements Observable{
 		
 		goalKeeperPanel.revalidate();
 		goalKeeperPanel.repaint();
-		midfieldersPanel.revalidate();
-		midfieldersPanel.repaint();
 		
 		midfieldersPanel.revalidate();
 		midfieldersPanel.repaint();
+		
 		strikersPanel.revalidate();
 		strikersPanel.repaint();
 		
@@ -213,7 +218,6 @@ public class Fantasy extends JFrame implements Observable{
 		
 		formationSelectionPanel.add(cmbFormations);
 		mainPanel.add(formationSelectionPanel, BorderLayout.NORTH);
-		
 	}
 
 	private String[] defineFormations(){

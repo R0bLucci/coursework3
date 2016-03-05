@@ -43,7 +43,6 @@ public class Controller implements Observer {
 		this.squad = squad;
 		this.fantasy = fantasy;
 		squad.initSquad();
-		fantasy.addObserver(this);
 		
 		labels = new ArrayList<JLabel>();
 		textFields = new ArrayList<JTextField>();
@@ -51,16 +50,18 @@ public class Controller implements Observer {
 		cmbActionsListener = new CmbActionsListener();
 		lblActionsListener = new LblActionsListener();
 		txtActionsListener = new TxtActionsListener();
-		getViewSelection();
 	}
 	
 	private String capitalizeName(String name){
-		return name.substring(0,1).toUpperCase() + name.substring(1);
+		if(name.length() > 1){
+			return (name.substring(0,1).toUpperCase() + name.substring(1)).trim();
+		}
+		return name.trim();
 	}
 	
 	private JLabel searchLabel(int panelName){
 		for(JLabel label: labels){
-			if(label.getName().equals(Integer.valueOf(panelName))){
+			if(label.getName().equals(String.valueOf(panelName))){
 				return label;
 			}
 		}
@@ -68,15 +69,19 @@ public class Controller implements Observer {
 	}
 	
 	
+	private JTextField searchTextField(int playerID){
+		for(JTextField textField: textFields){
+			if(textField.getName().equals(String.valueOf(playerID))){
+				return textField;
+			}
+		}
+		return null;
+	}
+	
 	private int parseFormation(String formation){
 		formation = formation.replace("-", "");
 		return Integer.parseInt(formation);
 	}
-	
-	private void getViewSelection(){
-		fantasy.getFormationSelection().addActionListener(cmbActionsListener);
-	}
-	
 	
 	private void setActionListenersToViewComponents(Observable subject, JComponent component, JTextField textField){
 		
@@ -84,10 +89,16 @@ public class Controller implements Observer {
 			JLabel label = ((JLabel)component);
 			label.addMouseListener(lblActionsListener);
 			labels.add(label);
+		}else if(component instanceof JComboBox){
+			JComboBox comboBox = ((JComboBox) component);
+			comboBox.addActionListener(cmbActionsListener);
 		}
-		textField.addActionListener(txtActionsListener);
-		textField.getDocument().addDocumentListener(txtActionsListener);
-		textFields.add(textField);
+		
+		if(textField != null){
+			textField.addActionListener(txtActionsListener);
+			textField.getDocument().addDocumentListener(txtActionsListener);
+			textFields.add(textField);
+		}
 	}
 	
 	@Override
@@ -169,10 +180,27 @@ public class Controller implements Observer {
 		}
 	}
 
-	private void setLabel(JLabel label, String name){
+	private void setImageOnLabel(JLabel label, String imagePath){
 		label.setText("");
-		label.setIcon(new ImageIcon("./src/Minor Piece of Coursework 3 Resources/squad/"+ name + ".jpg"));
+		label.setIcon(new ImageIcon(imagePath));
 	}
+	
+	private void resetImageOnLabel(JLabel label){
+		label.setText("+");
+		label.setIcon(null);
+	}
+	
+	private void setNameAndPathImageOfPlayer(Player player, String name, String path){
+		player.setName(capitalizeName(name));
+		player.setPath(path);
+	}
+	
+	
+	private void resetNameAndPathImageOfPlayer(Player player){
+		player.resetName();
+		player.resetImagePath();
+	}
+	
 	
 	private String setPlayerNameOnTxtField(String path){
 		for(String name: Player.getImagesName()){
@@ -186,7 +214,7 @@ public class Controller implements Observer {
 	private boolean checkDuplicate(Player player){
 		for(Player p: squad.getSquad()){
 			if(player.getImagePath().equals(p.getImagePath())){
-				if(player.equals(p) || player.getPlayerID() == p.getPlayerID()){
+				if(player.equals(p)){
 					continue;
 				}
 				return true;
@@ -216,8 +244,7 @@ public class Controller implements Observer {
 					placePlayersOnPitch(parseFormation(formation));
 				}else{
 					for(Player player: squad.getSquad()){
-						player.resetImagePath();
-						player.resetName();
+						resetNameAndPathImageOfPlayer(player);
 					}
 				}
 			}
@@ -235,6 +262,13 @@ public class Controller implements Observer {
 			fileChooser = new JFileChooser();
 		}
 		
+		private String removeFileExt(String fileWithExt){
+			if(fileWithExt != null){
+				return fileWithExt.substring(0, fileWithExt.lastIndexOf("."));
+			}
+			return fileWithExt;
+		}
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		}
@@ -247,29 +281,25 @@ public class Controller implements Observer {
 			
 			if(returnValue == JFileChooser.APPROVE_OPTION){
 				File file = fileChooser.getSelectedFile();
-				
+				String name = capitalizeName(removeFileExt(file.getName()));
 				JLabel lbl = (JLabel) e.getSource();
 				
-				lbl.setText("");
-				lbl.setIcon(new ImageIcon(file.getAbsolutePath()));
-				
+				setImageOnLabel(lbl, file.getAbsoluteFile().toString());
+
 				Player player = squad.searchPlayerByID(Integer.parseInt(lbl.getName()));
 				player.setPath(file.getAbsolutePath());
 				player.resetName();
-				player.setName(capitalizeName(setPlayerNameOnTxtField(file.getAbsolutePath())));
+				player.setName(name);
+				JTextField txt = searchTextField(player.getPlayerID());
+				txt.setText(player.getPlayerName());
 				
-				if(checkDuplicate(player)){
-					player.setPath("None");
-					lbl.setIcon(null);
-					lbl.setText("+");
-					player.resetName();
-					JOptionPane.showMessageDialog(fantasy, "Player already added.");
+				
+				if(checkDuplicate(player)){				
+					resetNameAndPathImageOfPlayer(player);		
+					resetImageOnLabel(lbl);
+					txt.setText(player.getPlayerName());
+					JOptionPane.showMessageDialog(fantasy, "The player " + name + "is already added.");
 				}
-				
-				//debug
-				/*for(Player player1: squad.getSquad()){
-					System.out.println(player1.getImagePath() + " "+player1.getPlayerID());
-				}*/
 			}
 			
 			// reset the file to null
@@ -340,29 +370,30 @@ public class Controller implements Observer {
 				for(String playerName: Player.getImagesName()){
 					if(name.equalsIgnoreCase(playerName)){
 						JLabel lbl = getMatchingLabel();
-						File file = new File("src/Minor Piece of Coursework 3 Resources/squad/"+ name + ".jpg");
-
-						setLabel(lbl, name);
+						File file = new File("src/Minor Piece of Coursework 3 Resources/squad/" + name + ".jpg");
 						
-						player.setName(capitalizeName(name));
-						player.setPath(file.getAbsolutePath());
+						setImageOnLabel(lbl, file.getAbsolutePath());
 						
-						if(checkDuplicate(player)){
-							player.setPath("None");
-							lbl.setIcon(null);
-							lbl.setText("+");
-							player.resetName();
+						
+						setNameAndPathImageOfPlayer(player, name, file.getAbsolutePath().toString());
+										
+						if(checkDuplicate(player)){	
+							
+							resetImageOnLabel(lbl);
+							
+							resetNameAndPathImageOfPlayer(player);
+							
+							JOptionPane.showMessageDialog(fantasy, "The player " + name + " is already added.");
 						}
 						
 						return;
 						
 					}else{
 						JLabel lbl = getMatchingLabel();
-						lbl.setText("+");
-						lbl.setIcon(null);
-						player.setPath("None");
-						player.resetImagePath();
-						player.resetName();
+									
+						resetImageOnLabel(lbl);
+						
+						resetNameAndPathImageOfPlayer(player);
 					}
 				}
 			}
@@ -376,7 +407,6 @@ public class Controller implements Observer {
 		@Override
 		public void changedUpdate(DocumentEvent arg0) {
 			// TODO Auto-generated method stub
-			
 		}
 
 		@Override

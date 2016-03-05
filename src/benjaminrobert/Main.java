@@ -15,10 +15,11 @@ public class Main {
 
 			@Override
 			public void run() {
-				Fantasy f = new Fantasy();
-				f.setVisible(true);
-				Squad s = new Squad();
-				Controller c = new Controller(s, f);
+				Fantasy fantasy = new Fantasy();
+				Squad squad = new Squad();
+				Controller controller = new Controller(squad, fantasy);
+				fantasy.initObserver(controller);
+				fantasy.setVisible(true);
 			}
 		});
 		

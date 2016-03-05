@@ -1,6 +1,6 @@
 package benjaminrobert.view;
 
-import javax.swing.JButton;
+
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 

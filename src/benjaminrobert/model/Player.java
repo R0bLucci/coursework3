@@ -16,6 +16,7 @@ public abstract class Player {
 	protected String imagePath;
 	protected int playerID;
 	protected ImageIcon image;
+	final static protected String defaultImagePath;
 
 	private static int ID;
 	protected static File file;
@@ -23,11 +24,12 @@ public abstract class Player {
 	static {
 		ID = 0;
 		file = new File("./src/Minor Piece of Coursework 3 Resources/squad");
+		defaultImagePath = "None";
 	}
 	
 	public Player(){
 		this.name = null;
-		imagePath = "None";
+		imagePath = defaultImagePath;
 		playerID = ++ID;
 	}
 	
@@ -78,7 +80,7 @@ public abstract class Player {
 	
 	
 	public void resetImagePath(){
-		imagePath = "None";
+		imagePath = defaultImagePath;
 	}
 	
 	public String getPlayerRole(){
