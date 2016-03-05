@@ -118,7 +118,7 @@ public class Controller implements Observer {
 		for(int i = 0; i < team.length; i++){
 			if(add >= 1 && team[i] instanceof Goalkeeper){
 				Goalkeeper benchGoalKeeper = (Goalkeeper) team[i];
-				fantasy.addBenchPlayer(benchGoalKeeper.getPlayerID(), benchGoalKeeper.getPlayerName(), "./src/Minor Piece of Coursework 3 Resources/squad/clyne.jpg");
+				fantasy.addBenchPlayer(benchGoalKeeper.getPlayerID(), benchGoalKeeper.getPlayerName(),benchGoalKeeper.getImagePath() );
 			}else if(team[i] instanceof Goalkeeper){
 				add++;
 				Goalkeeper goalkeeper = (Goalkeeper) team[i];
@@ -186,7 +186,7 @@ public class Controller implements Observer {
 	private boolean checkDuplicate(Player player){
 		for(Player p: squad.getSquad()){
 			if(player.getImagePath().equals(p.getImagePath())){
-				if(player.equals(p)){
+				if(player.equals(p) || player.getPlayerID() == p.getPlayerID()){
 					continue;
 				}
 				return true;
@@ -214,6 +214,11 @@ public class Controller implements Observer {
 				String formation = (String) cmb.getSelectedItem();
 				if(!formation.equalsIgnoreCase("select formation")){
 					placePlayersOnPitch(parseFormation(formation));
+				}else{
+					for(Player player: squad.getSquad()){
+						player.resetImagePath();
+						player.resetName();
+					}
 				}
 			}
 		}
@@ -250,6 +255,7 @@ public class Controller implements Observer {
 				
 				Player player = squad.searchPlayerByID(Integer.parseInt(lbl.getName()));
 				player.setPath(file.getAbsolutePath());
+				player.resetName();
 				player.setName(capitalizeName(setPlayerNameOnTxtField(file.getAbsolutePath())));
 				
 				if(checkDuplicate(player)){
@@ -330,7 +336,7 @@ public class Controller implements Observer {
 				String name = textField.getText();
 				
 				Player player = getPlayer();
-				
+
 				for(String playerName: Player.getImagesName()){
 					if(name.equalsIgnoreCase(playerName)){
 						JLabel lbl = getMatchingLabel();
@@ -355,6 +361,8 @@ public class Controller implements Observer {
 						lbl.setText("+");
 						lbl.setIcon(null);
 						player.setPath("None");
+						player.resetImagePath();
+						player.resetName();
 					}
 				}
 			}

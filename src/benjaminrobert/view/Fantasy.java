@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -57,10 +58,13 @@ public class Fantasy extends JFrame implements Observable{
 		
 		JLabel lblImgPlaceholder = new JLabel("+");
 		lblImgPlaceholder.setName(String.valueOf(id));
-		lblImgPlaceholder.setOpaque(true);
-		lblImgPlaceholder.setFont(new Font("Verdana", Font.BOLD, 15));
+		lblImgPlaceholder.setFont(new Font("Verdana", Font.BOLD, 30));
 		lblImgPlaceholder.setHorizontalAlignment(JLabel.CENTER);
-        lblImgPlaceholder.setOpaque(true);
+        lblImgPlaceholder.setOpaque(false);
+        if(!path.equals("None")){
+        	lblImgPlaceholder.setText("");
+        	lblImgPlaceholder.setIcon(new ImageIcon(path));
+        }
 		
 		
 		JTextField txtPlayerRole = new JTextField(playerName, 10);
@@ -71,6 +75,7 @@ public class Fantasy extends JFrame implements Observable{
 		txtPlayerRole.setBackground(null);
 		txtPlayerRole.setHorizontalAlignment(JTextField.CENTER);
 		txtPlayerRole.setFont(new Font("Verdana", Font.BOLD, 12));
+		txtPlayerRole.setOpaque(false);
 		
 		
 		Border border = BorderFactory.createEmptyBorder();
@@ -173,7 +178,7 @@ public class Fantasy extends JFrame implements Observable{
 		add(mainPanel);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setPreferredSize(new Dimension(400, 500));
+		setPreferredSize(new Dimension(800, 500));
 		pack();
 	}
 	

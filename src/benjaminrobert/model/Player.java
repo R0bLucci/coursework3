@@ -4,6 +4,11 @@ import java.io.File;
 
 import javax.swing.ImageIcon;
 
+/**
+ * 
+ * @author Robert
+ * Abstract class for a Player
+ */
 public abstract class Player {
 
 	protected String role;
@@ -11,7 +16,7 @@ public abstract class Player {
 	protected String imagePath;
 	protected int playerID;
 	protected ImageIcon image;
-	
+
 	private static int ID;
 	protected static File file;
 	
@@ -69,6 +74,11 @@ public abstract class Player {
 	
 	public void resetName(){
 		name = role;
+	}
+	
+	
+	public void resetImagePath(){
+		imagePath = "None";
 	}
 	
 	public String getPlayerRole(){
