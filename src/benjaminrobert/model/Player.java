@@ -90,4 +90,8 @@ public abstract class Player {
 	public String toString(){
 		return name + " ID: " + playerID;
 	}
+	
+	public static String getDefaultImagePathValue(){
+		return defaultImagePath;
+	}
 }

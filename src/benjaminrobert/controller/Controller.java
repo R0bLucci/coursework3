@@ -59,16 +59,6 @@ public class Controller implements Observer {
 		return name.trim();
 	}
 	
-	private JLabel searchLabel(int panelName){
-		for(JLabel label: labels){
-			if(label.getName().equals(String.valueOf(panelName))){
-				return label;
-			}
-		}
-		return null;
-	}
-	
-	
 	private JTextField searchTextField(int playerID){
 		for(JTextField textField: textFields){
 			if(textField.getName().equals(String.valueOf(playerID))){
@@ -201,19 +191,10 @@ public class Controller implements Observer {
 		player.resetImagePath();
 	}
 	
-	
-	private String setPlayerNameOnTxtField(String path){
-		for(String name: Player.getImagesName()){
-			if(path.contains(name)){
-				return name;
-			}
-		}
-		return "";
-	}
-	
 	private boolean checkDuplicate(Player player){
 		for(Player p: squad.getSquad()){
-			if(player.getImagePath().equals(p.getImagePath())){
+			
+			if((player.getImagePath().equals(p.getImagePath())) && !(player.getImagePath().equals(Player.getDefaultImagePathValue()))){
 				if(player.equals(p)){
 					continue;
 				}
@@ -284,21 +265,20 @@ public class Controller implements Observer {
 				String name = capitalizeName(removeFileExt(file.getName()));
 				JLabel lbl = (JLabel) e.getSource();
 				
-				setImageOnLabel(lbl, file.getAbsoluteFile().toString());
-
 				Player player = squad.searchPlayerByID(Integer.parseInt(lbl.getName()));
-				player.setPath(file.getAbsolutePath());
-				player.resetName();
-				player.setName(name);
+		
+				resetNameAndPathImageOfPlayer(player);
 				JTextField txt = searchTextField(player.getPlayerID());
 				txt.setText(player.getPlayerName());
 				
+				setImageOnLabel(lbl, file.getAbsoluteFile().toString());
+				setNameAndPathImageOfPlayer(player,name,file.getAbsolutePath().toString());
 				
 				if(checkDuplicate(player)){				
 					resetNameAndPathImageOfPlayer(player);		
 					resetImageOnLabel(lbl);
 					txt.setText(player.getPlayerName());
-					JOptionPane.showMessageDialog(fantasy, "The player " + name + "is already added.");
+					JOptionPane.showMessageDialog(fantasy, "The player " + name + " is already added.");
 				}
 			}
 			
@@ -363,23 +343,25 @@ public class Controller implements Observer {
 		
 		private void playerImageSearch(){
 			if(textField != null){
+				
 				String name = textField.getText();
 				
 				Player player = getPlayer();
-
+		
 				for(String playerName: Player.getImagesName()){
 					if(name.equalsIgnoreCase(playerName)){
-						JLabel lbl = getMatchingLabel();
+						JLabel currentLabel = getMatchingLabel();
 						File file = new File("src/Minor Piece of Coursework 3 Resources/squad/" + name + ".jpg");
 						
-						setImageOnLabel(lbl, file.getAbsolutePath());
-						
-						
 						setNameAndPathImageOfPlayer(player, name, file.getAbsolutePath().toString());
-										
+						
+						setImageOnLabel(currentLabel, file.getAbsolutePath());
+						
 						if(checkDuplicate(player)){	
 							
-							resetImageOnLabel(lbl);
+							JLabel labelToReset = getMatchingLabel();
+							
+							resetImageOnLabel(labelToReset);
 							
 							resetNameAndPathImageOfPlayer(player);
 							
@@ -389,7 +371,9 @@ public class Controller implements Observer {
 						return;
 						
 					}else{
+						
 						JLabel lbl = getMatchingLabel();
+						lbl = getMatchingLabel();
 									
 						resetImageOnLabel(lbl);
 						
