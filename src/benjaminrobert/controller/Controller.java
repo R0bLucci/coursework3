@@ -266,13 +266,15 @@ public class Controller implements Observer {
 				JLabel lbl = (JLabel) e.getSource();
 				
 				Player player = squad.searchPlayerByID(Integer.parseInt(lbl.getName()));
-		
+				
 				resetNameAndPathImageOfPlayer(player);
 				JTextField txt = searchTextField(player.getPlayerID());
 				txt.setText(player.getPlayerName());
 				
 				setImageOnLabel(lbl, file.getAbsoluteFile().toString());
 				setNameAndPathImageOfPlayer(player,name,file.getAbsolutePath().toString());
+				
+				txt.setText(player.getPlayerName());
 				
 				if(checkDuplicate(player)){				
 					resetNameAndPathImageOfPlayer(player);		
