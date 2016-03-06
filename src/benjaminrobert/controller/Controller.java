@@ -27,18 +27,33 @@ import benjaminrobert.model.Player;
 import benjaminrobert.model.Squad;
 import benjaminrobert.model.Striker;
 
-
+/**
+ * 
+ * @author Benjamin and Robert
+ * 
+ * The Controller class sets the event listeners for the view's component  
+ *
+ */
 public class Controller implements Observer {
 
-	private Squad squad;
-	private Fantasy fantasy;
-	private CmbActionsListener cmbActionsListener;
-	private LblActionsListener lblActionsListener;
-	private TxtActionsListener txtActionsListener;
+	private Squad squad; // model reference 
+	private Fantasy fantasy; // view reference 
+	private CmbActionsListener cmbActionsListener; // Listener for the comboBox view
+	private LblActionsListener lblActionsListener; // Listener for the labels view
+	private TxtActionsListener txtActionsListener; // Listener for the text Fields
 	
-	private List<JLabel> labels;
-	private List<JTextField> textFields;
+	private List<JLabel> labels;  // List of label from the view
+	private List<JTextField> textFields; //List of text field from the view
 	
+	/**
+	 * 
+	 * @param squad
+	 * @param fantasy
+	 * 
+	 *  Constructor to instantiate  a controller object
+	 *  A reference to the view and a reference to the model must be past
+	 *  
+	 */
 	public Controller(Squad squad, Fantasy fantasy){
 		this.squad = squad;
 		this.fantasy = fantasy;
@@ -52,6 +67,53 @@ public class Controller implements Observer {
 		txtActionsListener = new TxtActionsListener();
 	}
 	
+	/*------------------------------------ Utility method  -----------------------------------*/
+	
+	
+	// Set Image to label 
+	private void setImageOnLabel(JLabel label, String imagePath){
+		label.setText("");
+		label.setIcon(new ImageIcon(imagePath));
+	}
+	
+	// Reset label to the standard place holder
+	private void resetImageOnLabel(JLabel label){
+		label.setText("+");
+		label.setIcon(null);
+	}
+	
+	// Set the name and the path for the player
+	private void setNameAndPathImageOfPlayer(Player player, String name, String path){
+		player.setName(capitalizeName(name));
+		player.setPath(path);
+	}
+	
+	// Reset the name to to the role and the image to the default value "None"
+	private void resetNameAndPathImageOfPlayer(Player player){
+		player.resetName();
+		player.resetImagePath();
+	}
+	
+	
+
+	 // Check if there are players with the same image path
+	 
+	private boolean checkDuplicate(Player player){
+		for(Player p: squad.getSquad()){
+			
+			if((player.getImagePath().equals(p.getImagePath())) && !(player.getImagePath().equals(Player.getDefaultImagePathValue()))){
+				if(player.equals(p)){
+					continue;
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+	// Upper case the first letter
 	private String capitalizeName(String name){
 		if(name.length() > 1){
 			return (name.substring(0,1).toUpperCase() + name.substring(1)).trim();
@@ -59,6 +121,8 @@ public class Controller implements Observer {
 		return name.trim();
 	}
 	
+	
+	// 
 	private JTextField searchTextField(int playerID){
 		for(JTextField textField: textFields){
 			if(textField.getName().equals(String.valueOf(playerID))){
@@ -68,11 +132,13 @@ public class Controller implements Observer {
 		return null;
 	}
 	
+	// Parse formation 
 	private int parseFormation(String formation){
 		formation = formation.replace("-", "");
 		return Integer.parseInt(formation);
 	}
 	
+	// Assign action listener for each component in the view 
 	private void setActionListenersToViewComponents(Observable subject, JComponent component, JTextField textField){
 		
 		if(component instanceof JLabel){
@@ -91,6 +157,8 @@ public class Controller implements Observer {
 		}
 	}
 	
+	
+	/*---------------- Observable implementation ----------------------*/
 	@Override
 	public void update(Observable subject, JComponent component, JTextField textField) {
 		setActionListenersToViewComponents(subject, component, textField);	
@@ -113,7 +181,7 @@ public class Controller implements Observer {
 		placeStrikersOnPitch(team);
 	}
 	
-	
+	// Loop through the goal keepers and put the in the pitch
 	private void placeGoalkeeperOnPitch(Player[] team){
 		int add = 0;
 		for(int i = 0; i < team.length; i++){
@@ -128,6 +196,7 @@ public class Controller implements Observer {
 		}
 	}
 	
+	// Loop through the defenders and put the in the pitch
 	private void placeDefendersOnPitch(Player[] team){
 		int add = 0;
 		for(int i = 0; i < team.length; i++){
@@ -142,6 +211,7 @@ public class Controller implements Observer {
 		}
 	}
 	
+	// Loop through the mid fielders and put the in the pitch
 	private void placeMidfieldersOnPitch(Player[] team){
 		int add = 0;
 		for(int i = 0; i < team.length; i++){
@@ -156,6 +226,7 @@ public class Controller implements Observer {
 		}
 	}
 	
+	// Loop through the strikers and put the in the pitch
 	private void placeStrikersOnPitch(Player[] team){
 		int add = 0;
 		for(int i = 0; i < team.length; i++){
@@ -170,41 +241,8 @@ public class Controller implements Observer {
 		}
 	}
 
-	private void setImageOnLabel(JLabel label, String imagePath){
-		label.setText("");
-		label.setIcon(new ImageIcon(imagePath));
-	}
 	
-	private void resetImageOnLabel(JLabel label){
-		label.setText("+");
-		label.setIcon(null);
-	}
-	
-	private void setNameAndPathImageOfPlayer(Player player, String name, String path){
-		player.setName(capitalizeName(name));
-		player.setPath(path);
-	}
-	
-	
-	private void resetNameAndPathImageOfPlayer(Player player){
-		player.resetName();
-		player.resetImagePath();
-	}
-	
-	private boolean checkDuplicate(Player player){
-		for(Player p: squad.getSquad()){
-			
-			if((player.getImagePath().equals(p.getImagePath())) && !(player.getImagePath().equals(Player.getDefaultImagePathValue()))){
-				if(player.equals(p)){
-					continue;
-				}
-				return true;
-			}
-		}
-		return false;
-	}
-
-	
+	// Inner class used as a listener for the labels in the player panel 
 	class CmbActionsListener implements ActionListener{
 		
 		public CmbActionsListener(){
@@ -215,26 +253,22 @@ public class Controller implements Observer {
 		public void actionPerformed(ActionEvent e) {
 			labels.clear();
 			textFields.clear();
-			
-			
-			if(fantasy.getFormationSelection().equals(e.getSource())){
-				fantasy.clearPitch();
-				JComboBox<String> cmb = (JComboBox<String>) e.getSource();
-				String formation = (String) cmb.getSelectedItem();
-				if(!formation.equalsIgnoreCase("select formation")){
-					placePlayersOnPitch(parseFormation(formation));
-				}else{
-					for(Player player: squad.getSquad()){
-						resetNameAndPathImageOfPlayer(player);
-					}
+	
+			fantasy.clearPitch();
+			JComboBox<String> cmb = (JComboBox<String>) e.getSource();
+			String formation = (String) cmb.getSelectedItem();
+			if(!formation.equalsIgnoreCase("select formation")){
+				placePlayersOnPitch(parseFormation(formation));
+			}else{
+				for(Player player: squad.getSquad()){
+					resetNameAndPathImageOfPlayer(player);
 				}
 			}
 		}
 
-	}
+	}	
 		
-		
-		
+	// Inner class used as a listener for the labels in the player panel 
 	class LblActionsListener implements ActionListener, MouseListener{
 		
 		JFileChooser fileChooser;
@@ -254,6 +288,8 @@ public class Controller implements Observer {
 		public void actionPerformed(ActionEvent e) {
 		}
 
+
+		
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			fileChooser.setCurrentDirectory(new File("."));
@@ -316,15 +352,18 @@ public class Controller implements Observer {
 	}
 	
 	
+	//Inner listener class for the text fields in the player panel
 	class TxtActionsListener implements ActionListener, DocumentListener{
 	
 		JTextField textField;
 		
-		
+		// Constructor 
 		public TxtActionsListener(){
 			textField = null;
 		}
 		
+		// Return the player with the same id
+		// of the text field name
 		private Player getPlayer(){
 			for(Player player: squad.getSquad()){
 				if(player.getPlayerID() == Integer.parseInt((textField.getName()))){
@@ -334,6 +373,8 @@ public class Controller implements Observer {
 			return null;
 		}
 		
+		// Return the label with the same name
+		// of the player id and text name
 		private JLabel getMatchingLabel(){
 			for(JLabel lbl: labels){
 				if(lbl.getName().equals(textField.getName())){
@@ -343,6 +384,7 @@ public class Controller implements Observer {
 			return null;
 		}
 		
+		// Search for the player name  
 		private void playerImageSearch(){
 			if(textField != null){
 				

@@ -21,7 +21,12 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import benjaminrobert.controller.Observer;
-
+/**
+ * 
+ * @author Benjamin and Robert
+ *
+ * Fantasy class extends JFrame to reproduce the pitch for the fantasy GUI
+ */
 
 public class Fantasy extends JFrame implements Observable{
 	
@@ -30,10 +35,10 @@ public class Fantasy extends JFrame implements Observable{
 	JPanel formationSelectionPanel; // Panel for the combo box 
 	JPanel pitchPanel; // The pith panel
 	
-	JPanel goalKeeperPanel;
-	JPanel defendersPanel;
-	JPanel midfieldersPanel;
-	JPanel strikersPanel;
+	JPanel goalKeeperPanel; // Panel for the goal keeper 
+	JPanel defendersPanel; // Panel for the defenders
+	JPanel midfieldersPanel; // Panel for the mid fielder
+	JPanel strikersPanel; // Pame; 
 	
 	JPanel footerBenchPanel; // bench panel 
 	List<Observer> observers;
@@ -41,10 +46,11 @@ public class Fantasy extends JFrame implements Observable{
 	public Fantasy(){
 		// Call super class to set title of the frame
 		super("Fantasy Football");
-		// Initialize the components 
+		// Initialise the components 
 		init();
 	}
 	
+	// Get 
 	public void initObserver(Observer observer){
 		addObserver(observer);
 		notifyObservers(cmbFormations, null);
@@ -66,6 +72,8 @@ public class Fantasy extends JFrame implements Observable{
 		lblImgPlaceholder.setFont(new Font("Verdana", Font.BOLD, 30));
 		lblImgPlaceholder.setHorizontalAlignment(JLabel.CENTER);
         lblImgPlaceholder.setOpaque(false);
+        
+        // If the path is not None set the icon image with the image path path 
         if(!path.equals("None")){
         	lblImgPlaceholder.setText("");
         	lblImgPlaceholder.setIcon(new ImageIcon(path));
@@ -100,45 +108,95 @@ public class Fantasy extends JFrame implements Observable{
 		return playerPanel;
 	}
 	
+	
+	/*------------------- Utility method ---------------------------*/
+	
+	
+	
+	/**
+	 * 
+	 * @param id
+	 * @param playerName
+	 * @param path
+	 * 
+	 * Add goal keeper to the pitch
+	 */
 	public void addGoalkeeper(int id, String playerName, String path){
 		goalKeeperPanel.add(playerPlaceholderPanel(id, playerName, path));
 	}
 	
 	
+	
+	/**
+	 * 
+	 * @param id
+	 * @param playerName
+	 * @param path
+	 * 
+	 *  Add defender to the pitch
+	 */
 	public void addDefender(int id, String playerName, String path){
 		defendersPanel.add(playerPlaceholderPanel(id, playerName, path));
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * @param playerName
+	 * @param path
+	 * 
+	 * Add mid fielder to the pitch
+	 */
 	public void addMidfielder(int id, String playerName, String path){
 		midfieldersPanel.add(playerPlaceholderPanel(id, playerName, path));
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * @param playerName
+	 * @param path
+	 * 
+	 * Add mid fielder to the pitch
+	 */
 	public void addStriker(int id, String playerName, String path){
 		strikersPanel.add(playerPlaceholderPanel(id, playerName, path));
 	}
 	
+	/**
+	 * 
+	 * @param id
+	 * @param playerName
+	 * @param path
+	 * 
+	 * Add bench to the pitch
+	 */
 	public void addBenchPlayer(int id, String playerName, String path){
 		footerBenchPanel.add(playerPlaceholderPanel(id, playerName, path));
 	}
 	
+	// Initialise the goal keeper panel 
 	private void setGoalkeeperPanel(){
 		goalKeeperPanel = new JPanel();
 		goalKeeperPanel.setLayout(new BoxLayout(goalKeeperPanel, BoxLayout.X_AXIS));
 		goalKeeperPanel.setBackground(new Color(34,139,34));
 	}
 	
+	// Initialise the defender panel 
 	private void setDefendersPanel(){
 		defendersPanel = new JPanel();
 		defendersPanel.setLayout(new BoxLayout(defendersPanel, BoxLayout.X_AXIS));
 		defendersPanel.setBackground(new Color(50,205,50));
 	}
 	
+	// Initialise the mid fielder panel
 	private void setMidfieldersPanel(){
 		midfieldersPanel = new JPanel();
 		midfieldersPanel.setLayout(new BoxLayout(midfieldersPanel, BoxLayout.X_AXIS));
 		midfieldersPanel.setBackground(new Color(34,139,34));
 	}
 	
+	// Initialise the striker panel
 	private void setStrikersPanel(){
 		strikersPanel = new JPanel();
 		strikersPanel.setLayout(new BoxLayout(strikersPanel, BoxLayout.X_AXIS));
@@ -151,6 +209,8 @@ public class Fantasy extends JFrame implements Observable{
 		footerBenchPanel.setBackground(new Color(190,190,190));
 	}
 	
+	
+	// Set component for the fantasy frame
 	private void init(){
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
@@ -188,6 +248,7 @@ public class Fantasy extends JFrame implements Observable{
 		pack();
 	}
 	
+	// Clear pitch 
 	public void clearPitch(){
 			
 		goalKeeperPanel.removeAll();
@@ -209,6 +270,7 @@ public class Fantasy extends JFrame implements Observable{
 		footerBenchPanel.repaint();
 	}
 	
+	// Set the panel for the combo box 
 	private void setFormationSelectionPanel(){
 		formationSelectionPanel = new JPanel();
 		formationSelectionPanel.setLayout(new GridLayout(0,1));
@@ -220,15 +282,13 @@ public class Fantasy extends JFrame implements Observable{
 		mainPanel.add(formationSelectionPanel, BorderLayout.NORTH);
 	}
 
+	// Set the options for the combo box
 	private String[] defineFormations(){
 		String[] formations = {"Select formation", "4-4-2", "4-3-3", "3-5-2", "5-3-2", "3-4-3", "4-5-1"};
 		return formations;
 	}
-	
-	public JComboBox<String> getFormationSelection(){
-		return cmbFormations;
-	}
 
+	/*--------------- Implements observable ---------------------*/
 	public void notifyObservers(JComponent component, JTextField textField) {
 		if(observers != null){
 			for(Observer observer: observers){
@@ -237,6 +297,7 @@ public class Fantasy extends JFrame implements Observable{
 		}
 	}
 
+	// Add observer to 
 	public void addObserver(Observer observer) {
 		if(observers != null){
 			observers.add(observer);
